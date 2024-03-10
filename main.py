@@ -1,41 +1,29 @@
 nric = input('Enter an NRIC number: ')
 nric = nric.strip().upper()
+check = True
+ST = 'JZIHGFEDCBA'
+FG = 'XWUTRQPNMLK'
 
+if nric[0] != 'S' and nric[0] != 'T' and nric[0] != 'F' and nric[0] != 'G':
+  check = False
+elif len(nric) != 9:
+  check = False
+elif nric[1:8].isdigit() != True or nric[-1].isalpha() != True:
+  check = False
 
-first_digit = ["T","G","F","S"]
-table_1 = [2,7,6,5,4,3,2]
-SandT_table = ['J','Z','I','H','G','F','E','D','C','B','A']
-FandG_table = ['X','W','U','T','R','Q','P','N','M','L','K']
-
-
-def validation(nric):
-  if nric[0] in first_digit and len(nric) == 9 and nric[1:8].isdigit() == True and nric[-1].isalpha() == True:
-    return True
+if check == True:
+  weight = int(nric[1])*2 + int(nric[2])*7 + int(nric[3])*6 + int(nric[4])*5 + int(nric[5])*4 + int(nric[6])*3 + int(nric[7])*2
+  if nric[0] == 'T' or nric[0] == 'G':
+    weight += 4
+  remainder = weight % 11
+  if nric[0] == 'S' or nric[0] == 'T':
+    if nric[-1] != ST[remainder]:
+      check = False
   else:
-    return False
+    if nric[-1] != FG[remainder]:
+      check = False
 
-def check_digit(nric):
-  total_num = 0
-  for i in range(7):
-    num = int(nric[i+1]) * table_1[i]
-    total_num += num
-  if nric[0] in first_digit[:2]:
-    total_num += 4
-  remainder = total_num % 11
-  if nric[0] in ['S','T']:
-    if nric[-1] == SandT_table[remainder]:
-      return True
-    else:
-      return False
-  else:
-    if nric[-1] == FandG_table[remainder]:
-      return True
-    else:
-      return False
-if validation(nric) == True:
-  if check_digit(nric) == True:
-    print('NRIC is valid.')
-  else:
-    print('NRIC is invalid')
+if check == True:
+  print('NRIC is valid.')
 else:
   print('NRIC is invalid.')
